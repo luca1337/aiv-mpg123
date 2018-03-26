@@ -208,8 +208,7 @@ namespace Aiv.Mpg123.Tests
         [Test]
         public void TestTellIsZero()
         {
-            string decoder = Mpg123.Decoders.ToArray().FirstOrDefault();
-            Mpg123 mpg123 = new Mpg123();
+            Mpg123 mpg123 = new Mpg123(Mpg123.Decoders.ToArray().FirstOrDefault());
 
             long seekPositon = mpg123.Tell();
 
@@ -219,8 +218,7 @@ namespace Aiv.Mpg123.Tests
         [Test]
         public void TestTellFrameIsZero()
         {
-            string decoder = Mpg123.Decoders.ToArray().FirstOrDefault();
-            Mpg123 mpg123 = new Mpg123();
+            Mpg123 mpg123 = new Mpg123(Mpg123.Decoders.ToArray().FirstOrDefault());
 
             long seekPositon = mpg123.TellFrame();
 
@@ -230,8 +228,7 @@ namespace Aiv.Mpg123.Tests
         [Test]
         public void TestTellStreamIsNegative()
         {
-            string decoder = Mpg123.Decoders.ToArray().FirstOrDefault();
-            Mpg123 mpg123 = new Mpg123();
+            Mpg123 mpg123 = new Mpg123(Mpg123.Decoders.ToArray().FirstOrDefault());
 
             long seekPositon = mpg123.TellStream();
 
@@ -241,8 +238,7 @@ namespace Aiv.Mpg123.Tests
         [Test]
         public void TestSeekInvalid()
         {
-            string decoder = Mpg123.Decoders.ToArray().FirstOrDefault();
-            Mpg123 mpg123 = new Mpg123();
+            Mpg123 mpg123 = new Mpg123(Mpg123.Decoders.ToArray().FirstOrDefault());
 
             Assert.That(() => mpg123.Seek(10, SeekOrigin.Current), Throws.TypeOf<Mpg123.ErrorException>());
         }
@@ -250,10 +246,18 @@ namespace Aiv.Mpg123.Tests
         [Test]
         public void TestSeekFrameInvalid()
         {
-            string decoder = Mpg123.Decoders.ToArray().FirstOrDefault();
-            Mpg123 mpg123 = new Mpg123();
+            Mpg123 mpg123 = new Mpg123(Mpg123.Decoders.ToArray().FirstOrDefault());
 
             Assert.That(() => mpg123.SeekFrame(5, SeekOrigin.Begin), Throws.TypeOf<Mpg123.ErrorException>());
+        }
+
+        [Test]
+        public void TestSetIndexOK()
+        {
+            long pOffset = 0;
+            Mpg123 mpg123 = new Mpg123(Mpg123.Decoders.ToArray().FirstOrDefault());
+
+            Assert.That(mpg123.SetIndex(ref pOffset, 1, 50), Is.EqualTo(Mpg123.Errors.OK));
         }
 
         #endregion
