@@ -40,6 +40,29 @@ namespace Aiv.Mpg123
         [DllImport(LibraryName, EntryPoint = "mpg123_delete", CallingConvention = CallingConvention.Cdecl)]
         internal extern static void NativeMpg123Delete(IntPtr handle);
 
+        [return: MarshalAs(UnmanagedType.I4)]
+        [DllImport(LibraryName, EntryPoint = "mpg123_eq", CallingConvention = CallingConvention.Cdecl)]
+        internal extern static Mpg123.Errors NativeMpg123Eq(IntPtr handle, [MarshalAs(UnmanagedType.I4)] Mpg123.Channels channel, int band, double val);
+
+        [DllImport(LibraryName, EntryPoint = "mpg123_geteq", CallingConvention = CallingConvention.Cdecl)]
+        internal extern static double NativeMpg123GetEq(IntPtr handle, [MarshalAs(UnmanagedType.I4)] Mpg123.Channels channel, int band);
+
+        [return: MarshalAs(UnmanagedType.I4)]
+        [DllImport(LibraryName, EntryPoint = "mpg123_reset_eq", CallingConvention = CallingConvention.Cdecl)]
+        internal extern static Mpg123.Errors NativeMpg123ResetEq(IntPtr handle);
+
+        [return: MarshalAs(UnmanagedType.I4)]
+        [DllImport(LibraryName, EntryPoint = "mpg123_volume", CallingConvention = CallingConvention.Cdecl)]
+        internal extern static Mpg123.Errors NativeMpg123Volume(IntPtr handle, double vol);
+
+        [return: MarshalAs(UnmanagedType.I4)]
+        [DllImport(LibraryName, EntryPoint = "mpg123_volume_change", CallingConvention = CallingConvention.Cdecl)]
+        internal extern static Mpg123.Errors NativeMpg123VolumeChange(IntPtr handle, double change);
+
+        [return: MarshalAs(UnmanagedType.I4)]
+        [DllImport(LibraryName, EntryPoint = "mpg123_getvolume", CallingConvention = CallingConvention.Cdecl)]
+        internal extern static Mpg123.Errors NativeMpg123GetVolume(IntPtr handle, ref double base_, ref double really, ref double rva_db);
+      
         [DllImport(LibraryName, EntryPoint = "mpg123_open", CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.I4)]
         internal extern static Mpg123.Errors NativeMpg123Open(IntPtr handle, IntPtr path);
@@ -50,7 +73,7 @@ namespace Aiv.Mpg123
 
         [DllImport(LibraryName, EntryPoint = "mpg123_read", CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.I4)]
-        internal extern static Mpg123.Errors NativeMpg123Read(IntPtr handle, IntPtr outMemory, UIntPtr outMemSize, UIntPtr done);
+        internal extern static Mpg123.Errors NativeMpg123Read(IntPtr handle, IntPtr outMemory, UIntPtr outMemSize, ref UIntPtr done);
 
         [DllImport(LibraryName, EntryPoint = "mpg123_param", CallingConvention = CallingConvention.Cdecl)]
         internal extern static int NativeMpg123SetParam(IntPtr handle, [MarshalAs(UnmanagedType.I4)] Mpg123.Mpg123Params type, IntPtr value, double fvalue);
@@ -122,5 +145,20 @@ namespace Aiv.Mpg123
 
         [DllImport(LibraryName, EntryPoint = "mpg123_timeframe", CallingConvention = CallingConvention.Cdecl)]
         internal static extern IntPtr NativeMpg123TimeFrame(IntPtr handle, double sec);
+
+        [DllImport(LibraryName, EntryPoint = "mpg123_decode_frame", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern Mpg123.Errors NativeMpg123DecodeFrame(IntPtr handle, ref IntPtr num,  ref IntPtr audio, ref UIntPtr bytes);
+
+        [DllImport(LibraryName, EntryPoint = "mpg123_open_feed", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern Mpg123.Errors NativeMpg123OpenFeed(IntPtr handle);
+
+        [DllImport(LibraryName, EntryPoint = "mpg123_feed", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern Mpg123.Errors NativeMpg123Feed(IntPtr handle, IntPtr inBuff, UIntPtr size);
+
+        [DllImport(LibraryName, EntryPoint = "mpg123_decode", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern Mpg123.Errors NativeMpg123Decode(IntPtr handle, IntPtr inMemory, UIntPtr inMemorySize, IntPtr outMemory, UIntPtr outMemorySize, ref UIntPtr done);
+
+        [DllImport(LibraryName, EntryPoint = "mpg123_framepos", CallingConvention = CallingConvention.Cdecl)]
+        internal static extern IntPtr NativeMpg123FramePos(IntPtr handle);
     }
 }
