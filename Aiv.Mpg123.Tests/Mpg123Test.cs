@@ -4,6 +4,8 @@ using NUnit.Framework;
 using System.Linq;
 using System.Reflection;
 using System.IO;
+using System.Net.Sockets;
+using System.Net;
 
 namespace Aiv.Mpg123.Tests
 {
@@ -951,13 +953,31 @@ namespace Aiv.Mpg123.Tests
         #region SEEKS_TESTS
 
         [Test]
-        public void TestTellIsZero()
+        public void TestTellIsZero() //with no loaded stream
         {
             Mpg123 mpg123 = new Mpg123(Mpg123.Decoders.ToArray().FirstOrDefault());
 
             long seekPositon = mpg123.Tell();
 
             Assert.That(seekPositon, Is.Zero);
+        }
+
+        [Test]
+        public void TestTellWithLoadedStream()
+        {
+            string dirName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string path = Path.Combine(dirName, "bensound-scifi.mp3");
+            byte[] buffer = new byte[1000];
+            Mpg123 mpg123 = new Mpg123();
+            mpg123.Open(path);
+
+            uint end = 0;
+
+            while (mpg123.Read(buffer, ref end) != Mpg123.Errors.OK) { }
+
+            long seekPosition = mpg123.Tell();
+
+            Assert.That(seekPosition, Is.GreaterThan(0));
         }
 
         [Test]
@@ -971,7 +991,25 @@ namespace Aiv.Mpg123.Tests
         }
 
         [Test]
-        public void TestTellStreamIsNegative()
+        public void TestTellFrameWithLoadedStream()
+        {
+            string dirName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string path = Path.Combine(dirName, "bensound-scifi.mp3");
+            Mpg123 mpg123 = new Mpg123();
+            mpg123.Open(path);
+
+            byte[] buffer = new byte[1000];
+            uint end = 0;
+
+            while (mpg123.Read(buffer, ref end) != Mpg123.Errors.OK) { }
+
+            long offset = mpg123.TellStream();
+
+            Assert.That(offset, Is.GreaterThan(0));
+        }
+
+        [Test]
+        public void TestTellStreamIsNegative() //without loaded stream
         {
             Mpg123 mpg123 = new Mpg123(Mpg123.Decoders.ToArray().FirstOrDefault());
 
@@ -989,20 +1027,46 @@ namespace Aiv.Mpg123.Tests
         }
 
         [Test]
+        public void TestSeekToEndWithStreamLoaded()
+        {
+            string dirName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string path = Path.Combine(dirName, "bensound-scifi.mp3");
+            Mpg123 mpg123 = new Mpg123();
+            mpg123.Open(path);
+
+            byte[] buffer = new byte[1000];
+            uint end = 0;
+
+            while (mpg123.Read(buffer, ref end) != Mpg123.Errors.OK) { }
+
+            long seekOffset = mpg123.Seek(0, SeekOrigin.End);
+        }
+
+        [Test]
+        public void TestSeekEndOutOfBounds()
+        {
+            string dirName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string path = Path.Combine(dirName, "bensound-scifi.mp3");
+            Mpg123 mpg123 = new Mpg123();
+            mpg123.Open(path);
+
+            byte[] buffer = new byte[1000];
+            uint end = 0;
+
+            while (mpg123.Read(buffer, ref end) != Mpg123.Errors.OK) { }
+
+            long off = mpg123.Seek(10, SeekOrigin.Begin);
+
+            //i expect to get an exception because the seek will be set to (end + 1)
+            Assert.That(() => mpg123.Seek(-1, SeekOrigin.Begin), Throws.TypeOf<Mpg123.ErrorException>());
+        }
+
+        [Test]
         public void TestSeekFrameInvalid()
         {
             Mpg123 mpg123 = new Mpg123(Mpg123.Decoders.ToArray().FirstOrDefault());
 
             Assert.That(() => mpg123.SeekFrame(5, SeekOrigin.Begin), Throws.TypeOf<Mpg123.ErrorException>());
-        }
-
-        [Test]
-        public void TestSetIndexOK()
-        {
-            long pOffset = 0;
-            Mpg123 mpg123 = new Mpg123(Mpg123.Decoders.ToArray().FirstOrDefault());
-
-            Assert.That(mpg123.SetIndex(ref pOffset, 1, 50), Is.EqualTo(Mpg123.Errors.OK));
         }
 
         #endregion

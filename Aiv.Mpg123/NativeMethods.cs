@@ -129,13 +129,9 @@ namespace Aiv.Mpg123
         [DllImport(LibraryName, EntryPoint = "mpg123_seek", CallingConvention = CallingConvention.Cdecl)]
         internal static extern IntPtr NativeMpg123Seek(IntPtr handle, IntPtr offSample, SeekOrigin whence);
 
-        [DllImport(LibraryName, EntryPoint = "mpg123_index", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(LibraryName, EntryPoint = "mpg123_set_index", CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.I4)]
-        internal static extern Mpg123.Errors NativeMpg123Index(IntPtr handle, ref IntPtr offsets, IntPtr step, UIntPtr fill);
-
-        [DllImport(LibraryName, EntryPoint = "mpg123_index", CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.I4)]
-        internal static extern Mpg123.Errors NativeMpg123SetIndex(IntPtr handle, ref IntPtr offsets, IntPtr step, UIntPtr sample);
+        internal static extern Mpg123.Errors NativeMpg123SetIndex(IntPtr handle, ref IntPtr offsets, IntPtr step, UIntPtr fill);
 
         [DllImport(LibraryName, EntryPoint = "mpg123_feedseek", CallingConvention = CallingConvention.Cdecl)]
         internal static extern IntPtr NativeMpg123FeedSeek(IntPtr handle, IntPtr offSample, SeekOrigin whence, ref IntPtr inputOffset);
