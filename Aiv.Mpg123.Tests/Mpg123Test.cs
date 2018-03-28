@@ -1040,6 +1040,8 @@ namespace Aiv.Mpg123.Tests
             while (mpg123.Read(buffer, ref end) != Mpg123.Errors.OK) { }
 
             long seekOffset = mpg123.Seek(0, SeekOrigin.End);
+
+            Assert.That(seekOffset, Is.GreaterThan(0));
         }
 
         [Test]
@@ -1055,7 +1057,11 @@ namespace Aiv.Mpg123.Tests
 
             while (mpg123.Read(buffer, ref end) != Mpg123.Errors.OK) { }
 
-            long off = mpg123.Seek(10, SeekOrigin.Begin);
+            long offsets = 0;
+            long step = 0;
+            ulong fill = 0;
+
+            mpg123.Index(ref offsets, ref step, ref fill);
 
             //i expect to get an exception because the seek will be set to (end + 1)
             Assert.That(() => mpg123.Seek(-1, SeekOrigin.Begin), Throws.TypeOf<Mpg123.ErrorException>());

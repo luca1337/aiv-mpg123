@@ -50,21 +50,18 @@ namespace Aiv.Mpg123.Tests
         }
 
         #region API Tests: SetParam
-        [Test]
         public void TestSetParamIntOK() {
             Out123 handle = new Out123();
             handle.SetParamInt(Out123.Params.FLAGS, 1);
             Assert.AreEqual(Out123.Errors.OK, handle.LastErrorCode());
         }
 
-        [Test]
         public void TestSetParamFloatOK() {
             Out123 handle = new Out123();
             handle.SetParamFloat(Out123.Params.FLAGS, 1.0d);
             Assert.AreEqual(Out123.Errors.OK, handle.LastErrorCode());
         }
 
-        [Test]
         public void TestSetParamStringOK() {
             Out123 handle = new Out123();
             handle.SetParamString(Out123.Params.BINDIR, "myDir");
@@ -80,7 +77,6 @@ namespace Aiv.Mpg123.Tests
             long result = handle.GetParamInt(Out123.Params.FLAGS);
             Assert.AreEqual(2, result);
         }
-        [Test]
         public void TestGetParamFloatOK() {
             Out123 handle = new Out123();
             handle.SetParamFloat(Out123.Params.GAIN, 5.0);
@@ -97,7 +93,6 @@ namespace Aiv.Mpg123.Tests
         #endregion
 
         #region API Tests: CopyParamFrom
-        [Test]
         public void TestCopyParamFromOK() {
             Out123 handle = new Out123();
             handle.SetParamInt(Out123.Params.FLAGS, 0);
@@ -109,7 +104,6 @@ namespace Aiv.Mpg123.Tests
         #endregion
 
         #region API Tests: Drivers
-        [Test]
         public void TestDriversOK() {
             Out123 handle = new Out123();
             Assert.That(handle.Drivers().ToArray(), Has.Length.GreaterThan(0));
@@ -125,7 +119,6 @@ namespace Aiv.Mpg123.Tests
         #endregion
 
         #region API Tests: Open
-        [Test]
         public void TestOpenWithDefaultOK() {
             //Console.WriteLine(System.IO.Path.GetFullPath("."));
             //Tryed to absolute point at plugin folder to understand if the error was due to releative path issue.
@@ -136,7 +129,6 @@ namespace Aiv.Mpg123.Tests
         #endregion
 
         #region API Tests: Driver Info
-        [Test]
         public void TestDriverInfoOK() {
             Out123 handle = new Out123();
             handle.DriverInfo();

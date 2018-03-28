@@ -346,6 +346,25 @@ namespace Aiv.Mpg123
             return frameOffset >= 0 ? frameOffset : throw new ErrorException((Errors)frameOffset);
         }
 
+        public Errors Index(ref long offsets, ref long step, ref ulong fill)
+        {
+            offsets = 0;
+            step = 0;
+            fill = 0;
+
+            IntPtr pOffset = IntPtr.Zero;
+            IntPtr pStep = IntPtr.Zero;
+            UIntPtr pFill = UIntPtr.Zero;
+
+            Errors error = NativeMethods.NativeMpg123Index(handle, ref pOffset, ref pStep, ref pFill);
+
+            offsets = (long)pOffset;
+            step = (long)pStep;
+            fill = (ulong)pFill;
+
+            return error;
+        }
+
         public Errors SetIndex(ref long offsets, long step, ulong fill)
         {
             IntPtr offsetPtr = IntPtr.Zero;
